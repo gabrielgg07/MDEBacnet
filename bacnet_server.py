@@ -201,6 +201,6 @@ class FakeBACnetServer(BIPSimpleApplication):
 
 
 # --------------------------------------------------------------------
-server = FakeBACnetServer(this_device, Address("127.0.0.1:47808"))
+server = FakeBACnetServer(this_device, Address("127.0.0.1:47809"))
 print("🚀 BACnet server running on UDP/47808 ...")
 run()
