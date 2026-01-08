@@ -28,13 +28,13 @@ echo '[GetFdInfo "CB2 Analog In 02  Mon" raw_value]' | CCTKsh
 
 import array
 import binascii
-import Tkinter
+import tkinter
 
 VERSION_NUMBER="1.7.1"
 DEFAULT_KPATH="/var/local/home/ops1/Desktop/projects/UGFCS/UGFCS"
 
 
-class CCTK(Tkinter.Tk, object):
+class CCTK(tkinter.Tk, object):
     def __init__(self, KPATH=""):
         """If no KPATH is specified, CCTK requires the system's environment has
         KPATH set and pointing to an active project directory."""

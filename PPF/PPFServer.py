@@ -150,6 +150,26 @@ class FakeBACnetServer(BIPSimpleApplication):
             self.add_object(ai)
             self.ai_objects[inst] = ai
 
+        from bacpypes.object import AnalogValueObject
+        from bacpypes.basetypes import StatusFlags, EventTransitionBits, TimeStamp, EngineeringUnits, NotifyType, EventState
+        av = AnalogValueObject(
+            objectIdentifier=('analogValue', 1),
+            objectName=f"Test AV {1}",
+            presentValue=Real(0.0),
+            statusFlags=StatusFlags([0,0,0,0]),
+            eventState=EventState(0),
+            eventEnable=EventTransitionBits([0,0,0]),
+            ackedTransitions=EventTransitionBits([0,0,0]),
+            outOfService=Boolean(False),
+            notificationClass=Unsigned(0),
+            notifyType=1,
+            units=EngineeringUnits(0),
+        )
+
+        self.add_object(av)
+        self.av_objects = {}          # <-- create dictionary
+        self.av_objects[1] = av       # <-- store the AV object reference
+        self.localDevice.objectList.append(ObjectIdentifier(('analogValue', 1)))
         threading.Thread(target=self._drift_loop, daemon=True).start()
 
 
@@ -190,6 +210,30 @@ class FakeBACnetServer(BIPSimpleApplication):
             obj_id = apdu.objectIdentifier
             prop_id = apdu.propertyIdentifier
             print(f"🔍 ReadProperty from {apdu.pduSource}: {obj_id} {prop_id}")
+
+        # --- handle writes yourself ---
+        if isinstance(apdu, WritePropertyRequest):
+            obj = apdu.objectIdentifier
+            prop = apdu.propertyIdentifier
+            val = apdu.propertyValue.cast_out(Real)
+
+            print(f"WRITE: {obj} {prop} = {val}")
+
+            # If writing to AV
+            if obj == ('analogValue', 1) and prop == "presentValue":
+                self.av_objects[1].presentValue = float(val)
+
+                ack = SimpleAckPDU(context=apdu)
+                self.response(ack)
+                return
+
+            # If writing to AI (optional)
+            if obj[0] == "analogInput" and prop == "presentValue":
+                self.sensors[obj[1]] = float(val)
+                ack = SimpleAckPDU(context=apdu)
+                self.response(ack)
+                return
+
 
         if True:
             super().indication(apdu)
