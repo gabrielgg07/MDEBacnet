@@ -165,6 +165,77 @@ python3 PPFServer.py
 
 ⚠️ Only do this for debugging. Do **not** mix manual runs with `runAll.py`.
 
+
+
+## Ignition Setup (Quick)
+
+This project is designed to be tested locally using **Ignition’s BACnet/IP driver**.
+
+### 1. Log into Ignition Gateway
+
+Open your browser and go to:
+
+```
+http://localhost:8088
+```
+
+Log in to the **Gateway Web Interface**.
+
+---
+
+### 2. Create a BACnet/IP Driver
+
+1. Go to **Config → Networking → BACnet**
+2. Click **Create new BACnet/IP Driver**
+3. Set:
+
+| Field      | Value          |
+| ---------- | -------------- |
+| Name       | ignitionBacnet |
+| Local Port | 47808          |
+
+4. Save the driver
+
+📌 This port must be **different** from all Python devices.
+
+---
+
+### 3. Create BACnet Device Connections
+
+For each Python device:
+
+1. Under the BACnet driver, click **Create new BACnet Device**
+2. Set:
+
+| Field                | Example                  |
+| -------------------- | ------------------------ |
+| Remote Address       | 127.0.0.1                |
+| Remote Port          | 47809 (or 47810, etc)    |
+| Remote Device Number | 2001 (must match Python) |
+
+3. Save and wait for status = **Connected**
+
+Repeat for all running devices.
+
+---
+
+### 4. Browse Tags in Designer
+
+1. Launch **Ignition Designer**
+2. Open **Tag Browser**
+3. Expand:
+
+```
+BACnet → ignitionBacnet → <Device Name>
+```
+
+4. Drag BACnet points into your project
+
+You should now see live updates from the Python simulation.
+
+---
+
+
 ---
 
 ## Connecting from Ignition (or other BACnet Client)
@@ -270,5 +341,17 @@ pip install -r requirements.txt
 # run everything
 python3 runAll.py
 ```
+This is the only command you should need 90% of the time.
 
-🔥 This is the only command you should need 90% of the time.
+
+
+
+
+
+
+
+
+
+
+
+
