@@ -65,7 +65,7 @@ def make_ansi_string(text: str):
 
 
 this_device = LocalDeviceObject(
-    objectIdentifier=('device', 2001),
+    objectIdentifier=('device', 3002),
     objectName='PPFTransmitter',
     systemStatus=Enumerated(0),  # operational
     vendorName=CharacterString('VSA'),
@@ -314,7 +314,7 @@ class FakeBACnetServer(BIPSimpleApplication):
 
 # --------------------------------------------------------------------
 server = FakeBACnetServer(this_device, Address("127.0.0.1:47810"))
-print("🚀 BACnet server running on UDP/47809 ...")
+print("🚀 BACnet server running on UDP/47810 ...")
 run()
 
 

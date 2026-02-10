@@ -1,0 +1,13 @@
+CctkClient &
+
+setkp
+
+echo $KPATH
+
+MeasMon &
+
+GetMeasValue "FD"
+SetMeasValue "FD" num
+
+path for FDs
+/var/local/home/ops1/Desktop/projects/UGFCS/UGFCS/tmp/lists
