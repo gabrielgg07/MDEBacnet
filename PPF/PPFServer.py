@@ -48,7 +48,7 @@ def make_ansi_string(text: str):
 
 
 this_device = LocalDeviceObject(
-    objectIdentifier=('device', 2001),
+    objectIdentifier=('device', 3001),
     objectName='PPFTransmitter',
     systemStatus=Enumerated(0),  # operational
     vendorName=CharacterString('VSA'),
